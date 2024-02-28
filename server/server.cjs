@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema({
 const UserModel = mongoose.model('User', UserSchema);
 
 app.get('/', async (req, res) => {
-  const data = await UserModel.find({}, 'username phone'); // получить только поля username и phone
+  const data = await UserModel.find({}, 'username'); // получить только поля username и phone
   res.json(data);
 });
 
