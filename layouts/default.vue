@@ -1,6 +1,5 @@
 <template>
-    <div class="bg-slate-950 h-screen">
+  <div class="bg-slate-950 h-screen">
       <slot />
-    </div>
-  </template>
-  
+  </div>
+</template>
