@@ -14,10 +14,6 @@
   </AppFormWrapper>
 </template>
 
-
-
-
-
 <script>
 import { ref } from 'vue';
 import { validateLoginForm } from '~/composables/Form';
@@ -39,11 +35,47 @@ export default {
       errors.value = validateLoginForm({ login: login.value, password: password.value });
     };
 
-    const submit = () => {
-      errors.value = validateLoginForm({ login: login.value, password: password.value });
-    };
+    const submit = async () => {
 
-    return { login, password, errors, validateForm, submit }; // Экспорт функции validateForm
+  errors.value = validateLoginForm({ login: login.value, password: password.value });
+
+  if (Object.keys(errors.value).length === 0) {
+    try {
+      const response = await fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: login.value, password: password.value })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.token) {
+  localStorage.setItem('jwt', data.token);
+
+  console.log('Пользователь успешно авторизован');
+
+      } else if (data.message) {
+        console.log(data.message);
+      };
+
+    } catch (error) {
+  console.log('Ошибка при входе в систему:', error);
+  login.value = '';
+  password.value = '';
+    }
+  }
+};
+
+    return { login, password, errors, validateForm, submit };
   }
 }
 </script>
+
+<style scoped>
+
+</style>
