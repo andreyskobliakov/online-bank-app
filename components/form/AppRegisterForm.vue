@@ -24,10 +24,6 @@
   </AppFormWrapper>
 </template>
 
-
-
-
-
 <script>
 import { ref } from 'vue';
 import { validateRegisterForm } from '~/composables/Form';
@@ -51,12 +47,47 @@ export default {
       errors.value = validateRegisterForm({ name: name.value, email: email.value, phone: phone.value, password: password.value });
     };
 
-    const submit = () => {
-      errors.value = validateRegisterForm({ name: name.value, email: email.value, phone: phone.value, password: password.value });
-      
-    };
+    const submit = async () => {
+  // Валидация формы
+  errors.value = validateRegisterForm({ name: name.value, email: email.value, phone: phone.value, password: password.value });
+
+  // Если нет ошибок, отправляем запрос на сервер
+  if (Object.keys(errors.value).length === 0) {
+    try {
+      const response = await fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: name.value, lastName: '', phone: phone.value, email: email.value, password: password.value })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Обработка ответа от сервера
+      if (data.token) {
+        // Сохраняем токен в localStorage
+        localStorage.setItem('jwt', data.token);
+        console.log('Пользователь успешно зарегистрирован');
+      } else if (data.message) {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log('Ошибка при регистрации:', error);
+    }
+  }
+};
+
 
     return { name, email, phone, password, errors, validateField, submit };
   }
 }
 </script>
+
+<style scoped>
+
+</style>
