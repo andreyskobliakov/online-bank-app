@@ -1,12 +1,16 @@
 <template>
-  <NuxtLayout :name="layout">
-  </NuxtLayout>
+  <div>
+    <NuxtLayout name="auth">
+    </NuxtLayout>
+  </div>
 </template>
 
-<script setup>
-const layout = 'auth'
+<script setup lang="ts">
+definePageMeta({
+  layout: false,
+})
 </script>
 
-<style>
+<style scoped>
 
 </style>
