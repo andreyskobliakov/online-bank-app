@@ -12,23 +12,22 @@ module.exports = {
       colors: {
         'card-blue-start': '#36D1DC',
         'card-blue-end': '#5B86E5',
-        'card-gold-start': '#CDAF75',
-        'card-gold-middle': '#E8CA9E',
-        'card-gold-end': '#D3A273',
-        'card-credit-start': '#BE5869',
-        'card-credit-end': '#403A3E',
+        'card-premium-start': '#4776E6',
+        'card-premium-end': '#8E54E9',
+        'card-red-start': '#C84E89',
+        'card-red-end': '#F15F79',
+       
       },
-      backgroundImage: theme => ({
-         'card-blue-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
-         'card-gold-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
-         'card-credit-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
+      backgroundImage: _theme => ({
+        'card-blue-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
+        'card-red-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
+        'card-premium-gradient': 'linear-gradient(to right, var(--tw-gradient-stops))',
+
+
       }),
       gradientColorStops: theme => theme('colors'),
     },
   },
   variants: {},
-  plugins: [require('daisyui')],
-  daisyui: {
-    themes: ["cupcake", "dark", "night"],
-  },
+  plugins: [],
 }

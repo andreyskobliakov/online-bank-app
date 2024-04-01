@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --card-blue-start: #36D1DC;
+  --card-blue-end: #5B86E5;
+  --card-premium-start: #4776E6;
+  --card-premium-end: #8E54E9;
+  --card-red-start: #C84E89;
+  --card-red-end: #F15F79;
+}
+
+.bg-card-blue-gradient {
+  background: linear-gradient(to right, var(--card-blue-start), var(--card-blue-end));
+}
+
+.bg-card-red-gradient {
+  background: linear-gradient(to right, var(--card-red-start), var(--card-red-end));
+}
+
+.bg-card-premium-gradient {
+  background: linear-gradient(to right, var(--card-premium-start), var(--card-premium-end));
+}

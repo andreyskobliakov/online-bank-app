@@ -1,6 +1,6 @@
 <template>
-  <AppFormWrapper class="h-auto flex flex-col space-y-4">
-    <AppFieldWrapper v-model="name" label="Ім'я" :helper-text="'Введіть ваше ім я'" :error="errors.name" @input="validateField('name')" class="flex flex-col space-y-1">
+  <AppFormWrapper class="w-full flex flex-col space-y-4 max-w-md mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+    <AppFieldWrapper v-model="name" label="Ім'я" :helper-text="'Введіть ваше ім`я'" :error="errors.name" @input="validateField('name')" class="flex flex-col space-y-1">
       <template #icon>
         <Icon name="material-symbols:person-2" color="black" class="absolute left-3 top-3" size="1em" />
       </template>
@@ -20,9 +20,10 @@
         <Icon name="ion:md-lock" color="black" class="absolute left-3 top-3" size="1em" />
       </template>
     </AppFieldWrapper>
-    <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Реєстрація</button>
+    <button @click="submit" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">Реєстрація</button>
   </AppFormWrapper>
 </template>
+
 
 <script>
 import { ref } from 'vue';
@@ -48,10 +49,10 @@ export default {
     };
 
     const submit = async () => {
-  // Валидация формы
+  
   errors.value = validateRegisterForm({ name: name.value, email: email.value, phone: phone.value, password: password.value });
 
-  // Если нет ошибок, отправляем запрос на сервер
+  
   if (Object.keys(errors.value).length === 0) {
     try {
       const response = await fetch('http://localhost:3001/register', {
@@ -59,7 +60,7 @@ export default {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username: name.value, lastName: '', phone: phone.value, email: email.value, password: password.value })
+        body: JSON.stringify({ username: name.value, phone: phone.value, email: email.value, password: password.value })
       });
 
       if (!response.ok) {
@@ -68,9 +69,9 @@ export default {
 
       const data = await response.json();
 
-      // Обработка ответа от сервера
+      
       if (data.token) {
-        // Сохраняем токен в localStorage
+        
         localStorage.setItem('jwt', data.token);
         console.log('Пользователь успешно зарегистрирован');
       } else if (data.message) {

@@ -1,25 +1,20 @@
 <template>
-  <div data-theme="night" class=" bg-blue-950 flex flex-col items-center justify-center p-10 h-screen">
-      <UiAppLogo/>
-      <div class="auth-form">
-        <AppAuthForm/>
-      </div>
-      <slot />
+  <div class="bg-slate-900 flex flex-col items-center justify-center p-4 sm:p-10">
+    <UiAppLogo class="mb-8"/>
+    <slot />
   </div>
 </template>
 
 <script>
-import UiAppLogo from '@/components/ui/AppLogo.vue' // Путь до вашего компонента UiAppLogo
-import AppAuthForm from '@/components/AppAuthForm.vue' // Путь до вашего компонента AppAuthForm
+import UiAppLogo from '@/components/ui/AppLogo.vue'
 
 export default {
   components: {
     UiAppLogo,
-    AppAuthForm
   }
 }
 </script>
 
 <style scoped>
-/* Ваши стили */
+
 </style>
