@@ -1,9 +1,9 @@
 <template>
     <div class="flex items-center">
-      <AppPageIcon iconName="material-symbols:account-balance-wallet" />
+      <AppPageIcon iconName="bi:cash-coin" />
       <div class="ml-4">
-        <h2 class="text-blue-300 text-2xl">Гаманець</h2>
-        <p class="text-blue-300 text-xs">Переглял рахунків та інформациії</p>
+        <h2 class="text-blue-300 text-2xl">Депозити</h2>
+        <p class="text-blue-300 text-xs">Керуйте своїми депозитами онлайн.</p>
       </div>
     </div>
   </template>

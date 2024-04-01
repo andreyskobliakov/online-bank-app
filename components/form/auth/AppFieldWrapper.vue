@@ -2,7 +2,6 @@
   <div class="field-wrapper mb-4">
     <label v-if="label" class="block text-sm font-bold mb-2 text-white">{{ label }}</label>
     <div class="relative">
-      <!-- Именованный слот для иконки -->
       <slot name="icon" />
       <input
         :type="type"
