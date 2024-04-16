@@ -39,10 +39,26 @@ const CardSchema = new mongoose.Schema({
   balance: Number,
 });
 
+const TransactionSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  cardNumber: Number,
+  cardName: String,
+  cardType: String,
+  type: String, // 'credit', 'topUp', 'transfer'
+  amount: Number,
+  balance: Number, // Добавьте это поле
+  currency: String,
+  date: { type: Date, default: Date.now },
+  time: { type: Date, default: Date.now }
+});
+
+
+
+
 
 const UserModel = mongoose.model('User', UserSchema);
 const CardModel = mongoose.model('Card', CardSchema);
-
+const TransactionModel = mongoose.model('Transaction', TransactionSchema);
 
 app.get('/', async (req, res) => {
   const data = await UserModel.find({});
@@ -99,7 +115,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
 // Открытие банковской карты
 app.post('/openCard', async (req, res) => {
   const { userId, name, type, currency, paymentSystem, creditLimit } = req.body;
@@ -125,7 +140,6 @@ app.post('/openCard', async (req, res) => {
   }
 });
 
-
 // Получение информации о всех картах пользователя
 app.get('/getCards', async (req, res) => {
   const { userId } = req.query;
@@ -147,21 +161,135 @@ app.get('/getCards', async (req, res) => {
   }
 });
 
-// Получение полной информации о карте по номеру
-app.get('/getCardDetails', async (req, res) => {
-  const { cardNumber } = req.query;
+// Пополнение мобильного счета
+app.post('/topUp', async (req, res) => {
+  const { userId, cardNumber, amount } = req.body;
 
   try {
-    const card = await CardModel.findOne({ number: cardNumber });
-    if (!card) {
-      return res.status(404).json({ message: 'Карта не найдена' });
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: 'Пользователь не найден' });
     }
 
-    res.status(200).json(card);
+    const card = await CardModel.findOne({ userId, number: cardNumber });
+    if (!card) {
+      return res.status(400).json({ message: 'Карта не найдена' });
+    }
+
+    if (card.balance < amount) {
+      return res.status(400).json({ message: 'Недостаточно средств на карте' });
+    }
+
+    card.balance -= amount;
+    await card.save();
+
+    const transaction = new TransactionModel({ 
+      userId, 
+      cardNumber, 
+      cardName: card.name, 
+      cardType: card.type, 
+      type: 'Поповнення мобільного', 
+      amount: -amount,
+      currency: card.currency,
+    });
+    await transaction.save();
+
+    res.status(200).json({ message: 'Мобильный счет успешно пополнен' });
   } catch (error) {
-    res.status(500).json({ message: 'Произошла ошибка при получении информации о карте', error });
+    res.status(500).json({ message: 'Произошла ошибка при пополнении мобильного счета', error });
   }
 });
+
+// Перевод средств между картами пользователя
+app.post('/transfer', async (req, res) => {
+  const { userId, fromCardNumber, toCardNumber, amount } = req.body;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: 'Пользователь не найден' });
+    }
+
+    const fromCard = await CardModel.findOne({ userId, number: fromCardNumber });
+    if (!fromCard) {
+      return res.status(400).json({ message: 'Карта-источник не найдена' });
+    }
+
+    const toCard = await CardModel.findOne({ userId, number: toCardNumber });
+    if (!toCard) {
+      return res.status(400).json({ message: 'Карта-получатель не найдена' });
+    }
+
+    if (fromCard.balance < amount) {
+      return res.status(400).json({ message: 'Недостаточно средств на карте-источнике' });
+    }
+
+    fromCard.balance -= amount;
+    await fromCard.save();
+
+    toCard.balance += amount;
+    await toCard.save();
+
+    const transactionFrom = new TransactionModel({ 
+      userId, 
+      cardNumber: fromCardNumber, 
+      cardName: fromCard.name, 
+      cardType: fromCard.type, 
+      type: 'Переказ з', 
+      amount: -amount, 
+      currency: fromCard.currency 
+    });
+    await transactionFrom.save();
+
+    const transactionTo = new TransactionModel({ 
+      userId, 
+      cardNumber: toCardNumber, 
+      cardName: toCard.name, 
+      cardType: toCard.type, 
+      type: 'Переказ на ', 
+      amount: amount, 
+      currency: toCard.currency 
+    });
+    await transactionTo.save();
+
+    res.status(200).json({ message: 'Перевод успешно выполнен' });
+  } catch (error) {
+    res.status(500).json({ message: 'Произошла ошибка при переводе средств', error });
+  }
+});
+
+
+
+app.get('/getTransactions', async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: 'Пользователь не найден' });
+    }
+
+    const transactions = await TransactionModel.find({ userId })
+      .sort({ date: -1 })
+    if (!transactions.length) {
+      return res.status(400).json({ message: 'Транзакции не найдены' });
+    }
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: 'Произошла ошибка при получении информации о транзакциях', error });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 
 
 

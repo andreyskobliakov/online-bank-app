@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import UiAppLogo from '@/components/ui/AppLogo.vue'
+import UiAppLogo from '~/components/ui/layouts/AppLogo.vue'
 
 export default {
   components: {

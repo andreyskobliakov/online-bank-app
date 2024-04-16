@@ -1,13 +1,16 @@
 <template>
-  <div class="flex flex-col justify-center p-4 lg:p-0">
-    <div v-for="card in cards" :key="card.number" class="m-2 p-4 max-w-full h-auto rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl" :class="cardClass(card)" @click="toggleCard(card.number)">
+  <div class="flex flex-row justify-center p-4 lg:p-0">
+    <div v-for="card in cards" :key="card.number"
+      class="m-2 p-4 w-72 h-48 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl"
+      :class="cardClass(card)" @click="toggleCard(card.number)">
       <div class="flex items-center justify-between">
         <p class="text-xs sm:text-sm md:text-lg text-white font-semibold truncate">{{ card.type }}</p>
         <img src="/assets/icons/visa.svg" v-if="isVisaCard(card)" class="w-8 h-8" />
         <img src="/assets/icons/mastercard.svg" v-if="isPremiumCard(card)" class="w-8 h-8" />
       </div>
       <div class="flex justify-between w-full mt-2">
-        <h1 class="text-xs sm:text-sm md:text-lg text-white font-bold truncate">{{ isCardExpanded(card.number) ? getMaskedCardNumber(card.number) : '**** **** **** ' + String(card.number).slice(-4) }}</h1>
+        <h1 class="text-xs sm:text-sm md:text-lg text-white font-bold truncate">{{ isCardExpanded(card.number) ?
+      getMaskedCardNumber(card.number) : '**** **** **** ' + String(card.number).slice(-4) }}</h1>
         <span class="text-xs sm:text-sm md:text-lg text-white">{{ card.expiryDate }}</span>
       </div>
       <div class="flex justify-between w-full mt-4">
@@ -23,7 +26,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import AppBaseIcon from '../../components/ui/icons/AppBaseIcon.vue';

@@ -8,6 +8,7 @@ export default function useCards() {
     const userId = localStorage.getItem('userId');
     const response = await fetch(`http://localhost:3001/getCards?userId=${userId}`);
     cards.value = await response.json();
+    console.log(cards.value)
   };
 
   const toggleCard = (cardNumber) => {
