@@ -1,6 +1,6 @@
 <template>
   <div class="inline-flex rounded-lg bg-blue-200 p-2 m-2">
-    <AppBaseIcon :iconName="iconName" iconColor="text-blue-500" iconSize="2em" />
+    <AppBaseIcon :iconName="iconName" :iconSize="iconSize" iconColor="text-blue-500" />
   </div>
 </template>
 
@@ -16,6 +16,10 @@ export default {
     iconName: {
       type: String,
       required: true
+    },
+    iconSize: {
+      type: String,
+      default: '1em'
     }
   }
 }
