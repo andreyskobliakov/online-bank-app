@@ -44,17 +44,13 @@ const TransactionSchema = new mongoose.Schema({
   cardNumber: Number,
   cardName: String,
   cardType: String,
-  type: String, // 'credit', 'topUp', 'transfer'
+  type: String, 
   amount: Number,
-  balance: Number, // Добавьте это поле
+  balance: Number,
   currency: String,
   date: { type: Date, default: Date.now },
   time: { type: Date, default: Date.now }
 });
-
-
-
-
 
 const UserModel = mongoose.model('User', UserSchema);
 const CardModel = mongoose.model('Card', CardSchema);
@@ -258,8 +254,6 @@ app.post('/transfer', async (req, res) => {
   }
 });
 
-
-
 app.get('/getTransactions', async (req, res) => {
   const { userId } = req.query;
 
@@ -280,6 +274,8 @@ app.get('/getTransactions', async (req, res) => {
     res.status(500).json({ message: 'Произошла ошибка при получении информации о транзакциях', error });
   }
 });
+
+
 
 
 

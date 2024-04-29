@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col m-4">
+  <div class="flex flex-col w-full m-4">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="flex justify-end gap-2 m-2">
@@ -70,7 +70,6 @@ const loaded = ref(5);
 const monthFilter = ref('');
 const currency = ref('UAH');
 
-// Встановлення поточного місяця за замовчуванням
 const setCurrentMonth = () => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -80,7 +79,7 @@ const setCurrentMonth = () => {
 
 const filteredTransactions = computed(() => {
   if (!monthFilter.value) {
-    setCurrentMonth(); // Встановити поточний місяць, якщо monthFilter порожній
+    setCurrentMonth(); 
     return transactions.value.slice(0, loaded.value);
   }
   const [year, month] = monthFilter.value.split('-');
@@ -106,7 +105,7 @@ const totalExpenses = computed(() => {
 });
 
 onMounted(async () => {
-  setCurrentMonth(); // Встановити поточний місяць при монтуванні компонента
+  setCurrentMonth(); 
   await loadTransactions();
 });
 

@@ -69,5 +69,5 @@ const submit = async () => {
 </script>
 
 <style scoped>
-/* Ваши стили */
+
 </style>

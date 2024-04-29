@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center mt-4">
+  <div class="flex items-center justify-center mt-4 w-full">
     <div class="flex flex-col items-center">
       <div class="flex items-center mb-4">
         <span class="text-xs text-blue-500 mr-2">{{ activeForm === 'login' ? 'Вход' : 'Регистрация' }}</span>

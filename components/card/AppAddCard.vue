@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center justify-center w-full h-full m-4 px-4 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md mt-4 px-4 sm:px-0">
+  <div class="flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md px-4 sm:px-0">
       <h1 class="text-2xl font-bold mb-10 text-center text-white">Відкрити картку</h1>
       <form @submit.prevent="submitForm">
         <div class="mb-5">
@@ -35,7 +35,7 @@
             <option>USD</option>
             <option>EUR</option>
           </select>
-          <p v-if="errors.currency" class="text-red-500 text-xs italic">{{ errors.currency }}</p>
+          <p v-if="errors.currency" class="text-red-500 text-xs italic my-1">{{ errors.currency }}</p>
         </div>
         <div class="mx-auto flex justify-center">
           <button type="submit" class="py-2 px-4 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-md">Активувати картку</button>
@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
+import { useCardAdd } from '~/composables/useCardAdd.js'; 
 
 export default {
   setup() {
@@ -57,30 +58,8 @@ export default {
       paymentSystem: '',
       creditLimit: null,
     });
-    const errors = ref({});
     const showCreditLimit = ref(false);
-
-    const validateForm = () => {
-      errors.value = {};
-
-      if (!card.value.name) {
-        errors.value.name = 'Пожалуйста, выберите название.';
-      }
-
-      if (!card.value.type) {
-        errors.value.type = 'Пожалуйста, выберите тип карты.';
-      }
-
-      if (showCreditLimit.value && !card.value.creditLimit) {
-        errors.value.creditLimit = 'Пожалуйста, введите кредитный лимит.';
-      }
-
-      if (!card.value.currency) {
-        errors.value.currency = 'Пожалуйста, выберите валюту.';
-      }
-
-      return Object.keys(errors.value).length === 0;
-    };
+    const { errors, validateName, validateType, validateCreditLimit, validateCurrency, validateForm } = useCardAdd();
 
     const selectPaymentSystem = () => {
       if (['blue', 'red'].includes(card.value.name.toLowerCase())) {
@@ -90,10 +69,23 @@ export default {
       }
     };
 
-    watch(() => card.value.name, selectPaymentSystem);
-    watch(() => card.value.type, () => {
-      showCreditLimit.value = card.value.type === 'Кредитна картка';
+    watch(() => card.value.name, (newName) => {
+      validateName(newName);
       selectPaymentSystem();
+    });
+
+    watch(() => card.value.type, (newType) => {
+      validateType(newType);
+      showCreditLimit.value = newType === 'Кредитна картка';
+      selectPaymentSystem();
+    });
+
+    watch(() => card.value.currency, validateCurrency);
+   
+    watch(() => card.value.creditLimit, (newCreditLimit) => {
+      if (showCreditLimit.value) {
+        validateCreditLimit(newCreditLimit, showCreditLimit.value);
+      }
     });
 
     const submitForm = async () => {
@@ -122,8 +114,8 @@ export default {
 
         const data = await response.json();
 
-        if (data.message !== 'Карта успешно открыта') {
-          console.log('Произошла ошибка при открытии карты');
+        if (data.message !== 'Карта успішно відкрита') {
+          console.log('Виникла помилка при відкритті картки');
         }
       } catch (error) {
         console.error(error);
@@ -142,3 +134,5 @@ export default {
 
 <style scoped>
 </style>
+
+

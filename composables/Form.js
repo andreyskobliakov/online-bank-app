@@ -1,4 +1,3 @@
-// form.js
 export function validateLoginForm(form) {
   let errors = {};
 
@@ -26,7 +25,6 @@ export function validateLoginForm(form) {
 
   return errors;
 }
-
 
 export function validateRegisterForm(form) {
   let errors = {};
