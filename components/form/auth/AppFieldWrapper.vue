@@ -22,43 +22,37 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AppFieldWrapper',
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    helperText: {
-      type: String,
-      default: ''
-    },
-    error: {
-      type: String,
-      default: ''
-    },
-    type: {
-      type: String,
-      default: 'text'
-    }
-  },
-  setup(props, { emit }) {
-    const updateValue = (value) => {
-      emit('update:modelValue', value);
-    };
+<script setup>
+import { ref, computed } from 'vue';
 
-    const clearInput = () => {
-      emit('update:modelValue', '');
-    };
-
-    return { updateValue, clearInput };
+// Props are now reactive refs
+const props = defineProps({
+  modelValue: String,
+  label: String,
+  helperText: String,
+  error: String,
+  type: {
+    type: String,
+    default: 'text'
   }
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const inputClass = computed(() => {
+  let baseClass = 'shadow-inner appearance-none border-2 rounded-full w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline';
+  baseClass += props.error ? ' border-red-500 bg-red-100 focus:bg-white' : ' border-blue-500 bg-blue-100 focus:bg-white';
+  return baseClass;
+});
+
+const updateValue = (value) => {
+  emit('update:modelValue', value);
 };
+
+const clearInput = () => {
+  emit('update:modelValue', '');
+};
+
 </script>
 
 <style scoped>

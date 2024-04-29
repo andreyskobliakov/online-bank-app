@@ -9,13 +9,23 @@
     <UiAppPaymentsList/>
   </template>
   
-  <script>
-  import AppPageIcon from '~/components/ui/icons/AppPageIcon.vue'
-  
-  export default {
-    components: {
-      AppPageIcon
-    }
-  }
+  <script setup>
+  import { useHead } from '#imports';
+  import AppPageIcon from '~/components/ui/icons/AppPageIcon.vue';
+
+
+  useHead({
+    title: 'Платежі - SMART BANK',
+    meta: [
+      { name: 'description', content: 'Не витрачайте час на черги, а гроші — на зайві комісії з SMART BANK.' },
+      { property: 'og:title', content: 'Платежі - SMART BANK' },
+      { property: 'og:description', content: 'Здійснюйте платежі легко та без зайвих комісій з SMART BANK.' },
+      { property: 'og:type', content: 'website' },
+    ]
+  });
   </script>
+  
+  <style>
+  
+  </style>
   

@@ -1,4 +1,3 @@
-// useCardType.js
 export default function useCardType() {
     const cardClass = (card) => {
       switch (card.name.toLowerCase()) {
